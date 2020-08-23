@@ -80,14 +80,6 @@
 
 		callback = callback || function () {};
 
-		// Generate an ID
-	    var newId = ""; 
-	    var charset = "0123456789";
-
-        for (var i = 0; i < 6; i++) {
-     		newId += charset.charAt(Math.floor(Math.random() * charset.length));
-		}
-
 		// If an ID was actually given, find the item and update each property
 		if (id) {
 			for (var i = 0; i < todos.length; i++) {
@@ -102,15 +94,45 @@
 			localStorage[this._dbName] = JSON.stringify(data);
 			callback.call(this, todos);
 		} else {
+			// Generate an ID
+			let newId = this.getRandomId();
+			while(this.isIdAlreadyPresent(todos, newId)) {
+				newId = this.getRandomId();
+			}
 
     		// Assign an ID
-			updateData.id = parseInt(newId);
-    
+			updateData.id = newId;
 
 			todos.push(updateData);
 			localStorage[this._dbName] = JSON.stringify(data);
 			callback.call(this, [updateData]);
 		}
+	};
+
+	Store.prototype.getRandomId = function () {
+		var id = ""; 
+		var charset = "0123456789";
+
+		for (var i = 0; i < 6; i++) {
+			id += charset.charAt(Math.floor(Math.random() * charset.length));
+		}
+
+		return parseInt(id);
+	}
+
+	/**
+	 * Check if the id given or generated is already present in todos
+	 * 
+	 * @param {*} todos The todos
+	 * @param {*} id The id given or generated
+	 */
+	Store.prototype.isIdAlreadyPresent = function(todos, id) {
+		for(let todo of todos) {
+			if(id === todo.id) {
+				return true;
+			}
+		}
+		return false;
 	};
 
 	/**
