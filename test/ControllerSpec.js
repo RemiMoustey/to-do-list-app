@@ -40,7 +40,7 @@ describe('controller', function () {
 	};
 
 	let createViewStub = function () {
-		var eventRegistry = {};
+		let eventRegistry = {};
 		return {
 			render: jasmine.createSpy('render'),
 			bind: function (event, handler) {
