@@ -96,8 +96,16 @@
 		} else {
 			// Generate an ID
 			let newId = this.getRandomId();
+			let idWillIncrease = true;
 			while(this.isIdAlreadyPresent(todos, newId)) {
-				newId = this.getRandomId();
+				if(newId === 999999) {
+					idWillIncrease = false;
+				}
+				if(idWillIncrease) {
+					newId++;
+				} else {
+					newId--;
+				}
 			}
 
     		// Assign an ID
@@ -109,6 +117,9 @@
 		}
 	};
 
+	/**
+	 * Generate and return a random id
+	 */
 	Store.prototype.getRandomId = function () {
 		let id = ""; 
 		let charset = "0123456789";
